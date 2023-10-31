@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}{{article.article_title}}{% endblock %}
+{% block content %}
+    <h2 style="text-align: center;">{{article.article_title}}</h2>
+    <p style="text-align: center;">{{article.article_text}}</p>
+    <em style="padding-left: 15em">{{article.pub}}</em>
+    <br>
+    <br>
+    {% if article.was_published_recently %}
+        <strong style="color: red; font-size: 1.2em; padding-left: 12.5em;">НОВАЯ СТАТЬЯ</strong>
+    {% endif %}
+    <br>
+    <br>
+    <hr>
+    <br>
+    {% if latest_comm_list %}
+        {% for c in latest_comm_list %}
+            <p style="margin: 20px auto;">
+                <strong>{{c.author_name}}</strong>
+                <br>
+                {{c.comment_text}}
+                <br>
+            </p>
+        {% endfor %}
+        {% else %}
+            Комментарии не найдены. Оставьте его первым!
+    {% endif %}
+    <br>
+    <hr>
+    <br>
+    <form action="{% url 'articles:leave_comment' article.id %}" method="POST">
+        {% csrf_token %}
+        <input type="text" required placeholder="Ваше имя" name="inname">
+        <br>
+        <textarea name="incommenttext" required placeholder="Текст комментария" cols="30" rows="10"></textarea>
+        <br>
+        <button type="submit">Оставить комментарий (и душу)</button>
+    </form>
+{% endblock %}
